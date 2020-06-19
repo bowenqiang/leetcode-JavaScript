@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body>
+    <script>
+        /**
+         * @param {string} s
+         * @return {boolean}
+         */
+
+        var helper = function (s, idx, stack) {
+            if (stack[0] === ')') {
+                return false;
+            }
+            if (idx === s.length) {
+                if (stack.length === 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if (s[idx] === '*') {
+                var result1 = helper(s, idx + 1, [...stack]); //# as empty
+                var last = stack[stack.length - 1];
+                var temp = [...stack];
+                if (last === '(') {
+                    temp.pop();
+                } else {
+                    temp.push(')')
+                }
+                var result2 = helper(s, idx + 1, temp); //# as )
+
+                temp = [...stack];
+                temp.push('(')
+                var result3 = helper(s, idx + 1, temp); //# as C
+
+                return result1 || result2 || result3;
+            } else {
+                var last = stack[stack.length - 1];
+                if (last === '(' && s[idx] === ')') {
+                    stack.pop();
+                } else {
+                    stack.push(s[idx]);
+                }
+                return helper(s, idx + 1, [...stack]);
+            }
+        }
+
+        var checkValidString = function (s) {
+            return helper(s, 0, []);
+        };
+        // debugger;
+        console.log(checkValidString("(*()"));
+    </script>
+</body>
+
+</html>
